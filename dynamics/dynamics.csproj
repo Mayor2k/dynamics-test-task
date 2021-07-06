@@ -68,6 +68,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CheckObject.cs" />
     <Compile Include="CheckTablePage.xaml.cs">
       <DependentUpon>CheckTablePage.xaml</DependentUpon>
     </Compile>

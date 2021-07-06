@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using WinForms = System.Windows.Forms;
-using System.IO;
-using System.Diagnostics;
 
 namespace dynamics
 {
@@ -33,12 +31,12 @@ namespace dynamics
         {
             WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog();
             folderDialog.ShowNewFolderButton = false;
-            folderDialog.SelectedPath = @"c:\";
+            folderDialog.SelectedPath = @"c:\Projects\data\#data";
             WinForms.DialogResult result = folderDialog.ShowDialog();
 
             if (result == WinForms.DialogResult.OK)
             {
-                String sPath = folderDialog.SelectedPath;
+                string sPath = folderDialog.SelectedPath;
                 CheckTablePage checkTablePage = new CheckTablePage(sPath);
                 this.Content = checkTablePage;
             }
