@@ -25,22 +25,9 @@ namespace dynamics
         public MainWindow()
         {
             InitializeComponent();
-        }
 
-        private void onFolderSearcherClick(object sender, RoutedEventArgs e)
-        {
-            WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog();
-            folderDialog.ShowNewFolderButton = false;
-            folderDialog.SelectedPath = @"c:\Projects\data\#data";
-            WinForms.DialogResult result = folderDialog.ShowDialog();
-
-            if (result == WinForms.DialogResult.OK)
-            {
-                string sPath = folderDialog.SelectedPath;
-                CheckTablePage checkTablePage = new CheckTablePage(sPath);
-                this.Content = checkTablePage;
-            }
+            FileChooserPage page = new FileChooserPage();
+            Application.Current.MainWindow.Content = page;
         }
-            
     }
 }

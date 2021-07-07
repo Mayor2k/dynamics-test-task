@@ -60,6 +60,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="FileChooserPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -71,6 +75,9 @@
     <Compile Include="CheckObject.cs" />
     <Compile Include="CheckTablePage.xaml.cs">
       <DependentUpon>CheckTablePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FileChooserPage.xaml.cs">
+      <DependentUpon>FileChooserPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

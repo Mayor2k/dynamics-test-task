@@ -8,7 +8,22 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CheckTablePage">
 
-    <Grid>
-        <TextBlock Name="pathTextBlock">Hello world!</TextBlock>
+    <Grid Background="White" ShowGridLines="True" Name="rootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Имя объекта</TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Время старта</TextBlock>
+        <TextBlock Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Время остановки</TextBlock>
+        <TextBlock Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Схема проверки</TextBlock>
+        <TextBlock Grid.Column="4" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">Интервал остановки</TextBlock>
+            
     </Grid>
 </Page>
