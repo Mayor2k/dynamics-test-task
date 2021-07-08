@@ -20,25 +20,11 @@ namespace dynamics
 {
     public partial class CheckTablePage : Page
     {
-        public CheckTablePage(string path)
+        public Dictionary<string, CheckObject> uids = new Dictionary<string, CheckObject>();
+        public CheckTablePage(DirectoryInfo[] workDirectories)
         {
             InitializeComponent();
 
-            DirectoryInfo[] workDirectories;
-            try
-            {
-                DirectoryInfo objectsDirectoryInfo = new DirectoryInfo(path + @"\card\PKE");
-                workDirectories = objectsDirectoryInfo.GetDirectories();
-            }
-            catch (DirectoryNotFoundException)
-            {
-                FileChooserPage fileChooserPage = new FileChooserPage("Вы выбрали невернуб директорию!");
-                Application.Current.MainWindow.Content = fileChooserPage;
-                return;
-
-            }
-
-            Dictionary<string, string[]> uids = new Dictionary<string, string[]>();
             //перебор директорий с объектами
             for (int currentObjectDirNum = 0; currentObjectDirNum < workDirectories.Length; currentObjectDirNum++)
             {
@@ -63,32 +49,49 @@ namespace dynamics
                                     currentCheckNode.Attributes.GetNamedItem("active_cxema").Value,
                                     currentCheckNode.Attributes.GetNamedItem("averaging_interval_time").Value
                                 };
-                                uids.Add(currentCheckElement.GetAttribute("UID"), objectInfo);
+                                objectInfo[1] = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(objectInfo[1])).UtcDateTime.ToString();
+                                objectInfo[2] = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(objectInfo[2])).UtcDateTime.ToString();
 
-                                rootGrid.RowDefinitions.Add(new RowDefinition());
-                                for (int currentColumn = 0; currentColumn < objectInfo.Length; currentColumn++)
+                                CheckObject currentCheckObject = new CheckObject(
+                                    currentCheckElement.GetAttribute("UID"),
+                                    objectInfo[0],
+                                    objectInfo[1],
+                                    objectInfo[2],
+                                    objectInfo[3],
+                                    objectInfo[4],
+                                    new List<List<string>>()
+                                );
+                                uids.Add(currentCheckElement.GetAttribute("UID"), currentCheckObject);
+                                rootDataGrid.Items.Add(currentCheckObject);
+                            }
+                            else if (currentCheckNode.Name == "Result_Check_PKE")
+                            {
+                                CheckObject checkObject = uids[currentCheckElement.GetAttribute("UID")];
+                                List<string> checksList = new List<string>();
+                                for (int currentCheckElementNum = 0; currentCheckElementNum < currentCheckNode.Attributes.Count; currentCheckElementNum++)
                                 {
-                                    TextBlock textBlock = new TextBlock();
-                                    if (currentColumn == 1 || currentColumn == 2)
+                                    XmlNode currentNode = currentCheckNode.Attributes.Item(currentCheckElementNum);
+                                    string currentNodeValue = currentNode.Value;
+                                    if (currentNode.Name == "TimeTek")
                                     {
-                                        DateTime dataTime = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(objectInfo[currentColumn])).LocalDateTime;
-                                        textBlock.Text = dataTime.ToString();
+                                        currentNodeValue = DateTimeOffset.FromUnixTimeMilliseconds(long.Parse(currentNodeValue)).UtcDateTime.ToString();
                                     }
-                                    else
-                                    {
-                                        textBlock.Text = objectInfo[currentColumn];
-                                    }
-                                    textBlock.HorizontalAlignment = HorizontalAlignment.Center;
-                                    textBlock.VerticalAlignment = VerticalAlignment.Center;
-                                    textBlock.SetValue(Grid.ColumnProperty, currentColumn);
-                                    textBlock.SetValue(Grid.RowProperty, uids.Keys.Count);
-                                    rootGrid.Children.Add(textBlock);
+                                    checksList.Add(currentNodeValue);
                                 }
+                                checkObject.checksList.Add(checksList);
                             }
                         }
                     }
                 }
             }
+        }
+
+        private void Row_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DataGridRow row = sender as DataGridRow;
+            CheckObject currentObject = (CheckObject)row.Item;
+            CurrentCheckTableWindow currentCheckTableWindow = new CurrentCheckTableWindow(currentObject);
+            currentCheckTableWindow.Show();
         }
     }
 }

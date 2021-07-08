@@ -12,20 +12,19 @@ namespace dynamics
         public string nameObject { get; set; }
         public string timeStart { get; set; }
         public string timeEnd { get; set; }
-        public string intervalTime { get; set; }
         public string schemeNumber { get; set; }
+        public string intervalTime { get; set; }
+        public List<List<string>> checksList { get; set; }
 
-        public string[][] checkElement;
-
-        public CheckObject(string uid, string nameObject, string timeStart, string timeEnd, string intervalTime, string schemeNumber, string[][] checkElement)
+        public CheckObject(string uid, string nameObject, string timeStart, string timeEnd, string schemeNumber, string intervalTime, List<List<string>> checksList)
         {
             this.uid = uid;
             this.nameObject = nameObject;
             this.timeStart = timeStart;
             this.timeEnd = timeEnd;
-            this.intervalTime = intervalTime;
             this.schemeNumber = schemeNumber;
-            this.checkElement = checkElement;
+            this.intervalTime = intervalTime;        
+            this.checksList = checksList;
         }
     }
 }

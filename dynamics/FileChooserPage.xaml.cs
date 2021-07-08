@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,6 @@ using WinForms = System.Windows.Forms;
 
 namespace dynamics
 {
-    /// <summary>
-    /// Логика взаимодействия для FileChooserPage.xaml
-    /// </summary>
     public partial class FileChooserPage : Page
     {
         public FileChooserPage()
@@ -27,25 +25,29 @@ namespace dynamics
             InitializeComponent();
         }
 
-        public FileChooserPage(string error)
-        {
-            InitializeComponent();
-            folerSercherTextBlock.Text = error;
-
-        }
         private void onFolderSearcherClick(object sender, RoutedEventArgs e)
         {
             WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog();
             folderDialog.ShowNewFolderButton = false;
-            //folderDialog.SelectedPath = @"c:\Projects\data\#data";
-            folderDialog.SelectedPath = @"c:\";
+            folderDialog.SelectedPath = @"c:\Projects\data\#data";
             WinForms.DialogResult result = folderDialog.ShowDialog();
 
             if (result == WinForms.DialogResult.OK)
             {
                 string sPath = folderDialog.SelectedPath;
-                CheckTablePage checkTablePage = new CheckTablePage(sPath);
-                Application.Current.MainWindow.Content = checkTablePage;
+
+                DirectoryInfo[] workDirectories;
+                try
+                {
+                    DirectoryInfo objectsDirectoryInfo = new DirectoryInfo(sPath + @"\card\PKE");
+                    workDirectories = objectsDirectoryInfo.GetDirectories();
+                    NavigationService.Navigate(new CheckTablePage(workDirectories));
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    folerSercherTextBlock.Text = "Вы выбрали неверную директорию!";
+                    return;
+                }
             }
         }
     }

@@ -17,17 +17,12 @@ using WinForms = System.Windows.Forms;
 
 namespace dynamics
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
-
-            FileChooserPage page = new FileChooserPage();
-            Application.Current.MainWindow.Content = page;
+            mainFrame.NavigationService.Navigate(new FileChooserPage());
         }
     }
 }
