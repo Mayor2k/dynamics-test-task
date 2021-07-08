@@ -58,7 +58,7 @@ namespace dynamics
             WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog
             {
                 ShowNewFolderButton = true,
-                SelectedPath = @"C:\Users\mayor\Desktop"
+                SelectedPath = @"C:\"
             };
             WinForms.DialogResult result = folderDialog.ShowDialog();
             if (result == WinForms.DialogResult.OK)

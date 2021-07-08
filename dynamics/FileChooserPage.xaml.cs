@@ -29,7 +29,7 @@ namespace dynamics
         {
             WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog();
             folderDialog.ShowNewFolderButton = false;
-            folderDialog.SelectedPath = @"c:\Projects\data\#data";
+            folderDialog.SelectedPath = @"c:\";
             WinForms.DialogResult result = folderDialog.ShowDialog();
 
             if (result == WinForms.DialogResult.OK)
