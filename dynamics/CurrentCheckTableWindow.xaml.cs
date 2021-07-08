@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Excel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,7 +18,7 @@ using WinForms = System.Windows.Forms;
 
 namespace dynamics
 {
-    public partial class CurrentCheckTableWindow : Window
+    public partial class CurrentCheckTableWindow : System.Windows.Window
     {
         public Dictionary<string, List<string>> schemes = new Dictionary<string, List<string>>()
         {
@@ -47,11 +49,59 @@ namespace dynamics
             {
                 rootDataGrid.Items.Add(checkObject.checksList[currentRow]);
             }
+
+            Console.WriteLine(schemes[checkObject.schemeNumber].Count);
         }
 
         private void exportToExelClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(checkObject.nameObject);
+            WinForms.FolderBrowserDialog folderDialog = new WinForms.FolderBrowserDialog
+            {
+                ShowNewFolderButton = true,
+                SelectedPath = @"C:\Users\mayor\Desktop"
+            };
+            WinForms.DialogResult result = folderDialog.ShowDialog();
+            if (result == WinForms.DialogResult.OK)
+            {
+                string sPath = folderDialog.SelectedPath;
+                Microsoft.Office.Interop.Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
+
+                if (xlApp == null)
+                {
+                    MessageBox.Show("Excel не установлен на Вашем компьютере!");
+                    return;
+                }
+
+                object misValue = System.Reflection.Missing.Value;
+                Microsoft.Office.Interop.Excel.Workbook xlWorkBook = xlApp.Workbooks.Add(misValue); ;
+                Microsoft.Office.Interop.Excel.Worksheet xlWorkSheet = (Microsoft.Office.Interop.Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                for (int currentExcelColumn = 0; currentExcelColumn < schemes[checkObject.schemeNumber].Count; currentExcelColumn++)
+                {
+                    xlWorkSheet.Cells[1, currentExcelColumn + 1] = schemes[checkObject.schemeNumber][currentExcelColumn];
+                }
+
+                for (int currentExcelRow = 0; currentExcelRow < checkObject.checksList.Count; currentExcelRow++)
+                {
+                    for (int currentExcelColumn = 0; currentExcelColumn < checkObject.checksList[currentExcelRow].Count; currentExcelColumn++)
+                    {
+                        xlWorkSheet.Cells[currentExcelRow + 2, currentExcelColumn + 1] = checkObject.checksList[currentExcelRow][currentExcelColumn];
+                    }
+                }
+
+                xlWorkBook.SaveAs(sPath + @"\" + checkObject.uid + ".xlsx", Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, misValue,
+                misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+
+
+                xlWorkBook.Close(true, misValue, misValue);
+                xlApp.Quit();
+
+                Marshal.ReleaseComObject(xlWorkSheet);
+                Marshal.ReleaseComObject(xlWorkBook);
+                Marshal.ReleaseComObject(xlApp);
+
+                MessageBox.Show("Файл успешно создан в: " + sPath + @"\" + checkObject.uid + ".xlsx");
+            }
         }
     }
 }
